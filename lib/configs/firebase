@@ -1,0 +1,15 @@
+firebaseInit() async {
+  bool isWeb = kIsWeb;
+  if (isWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyA0As2PKCBG-4ugqxRdFfmbGwqHvw-rXZA",
+        projectId: "my-pulsa",
+        messagingSenderId: "1069999075979",
+        appId: "1:1069999075979:web:2d83f3834c195cb5c35a8e",
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+}
