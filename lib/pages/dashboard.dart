@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keuangan/models/model.dart';
 import 'package:flutter_keuangan/pages/history.dart';
+import 'package:flutter_keuangan/services/database.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final list = memberData;
+    final list = Provider.of<List<Member>>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -23,7 +25,16 @@ class Dashboard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => History(data: list[index]),
+                          builder: (context) => MultiProvider(
+                            providers: [
+                              StreamProvider<List<Payment>>.value(
+                                initialData: const [],
+                                value: DatabaseService(uid: list[index].uid)
+                                    .payments,
+                              ),
+                            ],
+                            child: History(data: list[index]),
+                          ),
                         ),
                       );
                     },
