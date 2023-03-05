@@ -87,12 +87,17 @@ class DatabaseService {
 
   // ///
 
-  // // add Payment
-  // Future updatePaymentData(Payment data) async {
-  //   return await paymentCollection.doc(uid).set({
-  //     'title': data.title,
-  //   });
-  // }
+  // add Payment
+  Future updatePaymentData(Payment data) async {
+    return await FirebaseFirestore.instance
+        .collection('members/$uid/payments')
+        .doc()
+        .set({
+      'name': data.name,
+      'nominal': data.nominal,
+      'month': data.month,
+    });
+  }
 
   // Payment list from snapshot
   List<Payment> _paymentListFromSnapshot(QuerySnapshot snapshot) {

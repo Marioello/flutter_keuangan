@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keuangan/models/model.dart';
+import 'package:flutter_keuangan/pages/add.dart';
 import 'package:provider/provider.dart';
 
 class History extends StatefulWidget {
@@ -12,9 +13,9 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  int _sortColumnIndex = 0;
-  bool _sortAsc = true;
-  bool _sortMonthAsc = true;
+  // int _sortColumnIndex = 0;
+  // bool _sortAsc = true;
+  // bool _sortMonthAsc = true;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,18 @@ class _HistoryState extends State<History> {
           '${widget.data.blockNo} - ${widget.data.name}',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return QuizAdd(uid: widget.data.uid);
+                },
+              ));
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -51,34 +64,25 @@ class _HistoryState extends State<History> {
                     ),
                   ),
                   onSort: (columnIndex, sortAscending) {
-                    setState(
-                      () {
-                        if (columnIndex == _sortColumnIndex) {
-                          _sortAsc = _sortMonthAsc = sortAscending;
-                        } else {
-                          _sortColumnIndex = columnIndex;
-                          _sortAsc = _sortMonthAsc;
-                        }
-                        list.sort((a, b) => a.month.compareTo(b.month));
-                        if (!_sortAsc) {
-                          list = list.reversed.toList();
-                        }
-                      },
-                    );
+                    // setState(
+                    //   () {
+                    //     if (columnIndex == _sortColumnIndex) {
+                    //       _sortAsc = _sortMonthAsc = sortAscending;
+                    //     } else {
+                    //       _sortColumnIndex = columnIndex;
+                    //       _sortAsc = _sortMonthAsc;
+                    //     }
+                    //     list.sort((a, b) => a.month.compareTo(b.month));
+                    //     if (!_sortAsc) {
+                    //       list = list.reversed.toList();
+                    //     }
+                    //   },
+                    // );
                   },
                 ),
                 const DataColumn(
                   label: Text(
                     'Nominal',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const DataColumn(
-                  label: Text(
-                    'No',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -92,13 +96,12 @@ class _HistoryState extends State<History> {
                       cells: [
                         DataCell(Text(e.name)),
                         DataCell(Text(e.nominal)),
-                        DataCell(Text('${e.month}')),
                       ],
                     ),
                   )
                   .toList(),
               sortColumnIndex: 0,
-              sortAscending: _sortAsc,
+              // sortAscending: _sortAsc,
             )
           ],
         ),
