@@ -5,6 +5,7 @@ import 'package:flutter_keuangan/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatelessWidget {
+  static const String route = '/';
   const Dashboard({super.key});
 
   @override
@@ -22,21 +23,30 @@ class Dashboard extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => MultiProvider(
-                            providers: [
-                              StreamProvider<List<Payment>>.value(
-                                initialData: const [],
-                                value: DatabaseService(uid: list[index].uid)
-                                    .payments,
-                              ),
-                            ],
-                            child: History(data: list[index]),
-                          ),
-                        ),
+                        History.route,
+                        arguments: {
+                          'uid': list[index].uid,
+                          'name': list[index].name,
+                        },
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => MultiProvider(
+                      //       providers: [
+                      //         StreamProvider<List<Payment>>.value(
+                      //           initialData: const [],
+                      //           value: DatabaseService(uid: list[index].uid)
+                      //               .payments,
+                      //         ),
+                      //       ],
+                      //       child: History(
+                      //           uid: list[index].uid, data: list[index]),
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: Text(list[index].name),
                   );
