@@ -6,15 +6,14 @@ import 'package:provider/provider.dart';
 class History extends StatelessWidget {
   static const String route = '/history';
 
+  final String uid;
+  final String name;
+
   ///
-  const History({super.key});
+  const History({super.key, required this.uid, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map;
-    var uid = arg['uid'];
-    var name = arg['name'];
-
     ///
     return Scaffold(
       appBar: AppBar(

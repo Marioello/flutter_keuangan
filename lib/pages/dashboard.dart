@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keuangan/models/arguments.dart';
 import 'package:flutter_keuangan/models/model.dart';
 import 'package:flutter_keuangan/pages/history.dart';
-import 'package:flutter_keuangan/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatelessWidget {
@@ -26,10 +26,8 @@ class Dashboard extends StatelessWidget {
                       Navigator.pushNamed(
                         context,
                         History.route,
-                        arguments: {
-                          'uid': list[index].uid,
-                          'name': list[index].name,
-                        },
+                        arguments:
+                            HistoryArguments(list[index].uid, list[index].name),
                       );
                       // Navigator.push(
                       //   context,
