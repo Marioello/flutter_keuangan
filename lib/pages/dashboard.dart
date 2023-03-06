@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keuangan/models/arguments.dart';
-import 'package:flutter_keuangan/models/model.dart';
-import 'package:flutter_keuangan/pages/history.dart';
 import 'package:provider/provider.dart';
+
+import '../models/arguments.dart';
+import '../models/model.dart';
+import 'history.dart';
 
 class Dashboard extends StatelessWidget {
   static const String route = '/';

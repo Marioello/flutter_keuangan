@@ -1,16 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_keuangan/configs/firebase';
-import 'package:flutter_keuangan/constants.dart';
-import 'package:flutter_keuangan/models/arguments.dart';
-import 'package:flutter_keuangan/models/model.dart';
-import 'package:flutter_keuangan/pages/dashboard.dart';
-import 'package:flutter_keuangan/pages/history.dart';
-import 'package:flutter_keuangan/pages/not_found.dart';
-import 'package:flutter_keuangan/services/database.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+
+import 'configs/firebase';
+import 'constants.dart';
+import 'models/arguments.dart';
+import 'models/model.dart';
+import 'pages/dashboard.dart';
+import 'pages/history.dart';
+import 'pages/not_found.dart';
+import 'services/database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,12 +34,16 @@ class MyApp extends StatelessWidget {
             return pageRoute(
               MultiProvider(
                 providers: [
+                  StreamProvider<List<Member>>.value(
+                    initialData: const [],
+                    value: DatabaseService(uid: '').members,
+                  ),
                   StreamProvider<List<Payment>>.value(
                     initialData: const [],
                     value: DatabaseService(uid: args.uid).payments,
                   ),
                 ],
-                child: History(uid: args.uid, name: args.name),
+                child: History(uid: args.uid),
               ),
             ); // Pass it to BarPage.
           }
@@ -53,12 +56,16 @@ class MyApp extends StatelessWidget {
             return pageRoute(
               MultiProvider(
                 providers: [
+                  StreamProvider<List<Member>>.value(
+                    initialData: const [],
+                    value: DatabaseService(uid: '').members,
+                  ),
                   StreamProvider<List<Payment>>.value(
                     initialData: const [],
                     value: DatabaseService(uid: uid).payments,
                   ),
                 ],
-                child: History(uid: uid, name: name),
+                child: History(uid: uid),
               ),
             ); // Pass it to BarPage.
           }

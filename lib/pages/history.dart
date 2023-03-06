@@ -1,38 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keuangan/models/model.dart';
-import 'package:flutter_keuangan/services/database.dart';
 import 'package:provider/provider.dart';
+
+import '../models/model.dart';
+import '../services/database.dart';
 
 class History extends StatelessWidget {
   static const String route = '/history';
 
   final String uid;
-  final String name;
 
   ///
-  const History({super.key, required this.uid, required this.name});
+  const History({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
     ///
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          name,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+        title: Consumer<List<Member>>(
+          builder: (_, value, __) {
+            String name =
+                value.where((element) => element.uid == uid).single.name;
+            return Text(
+              name,
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+            );
+          },
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Navigator.push(context, MaterialPageRoute(
-              //   builder: (context) {
-              //     return QuizAdd(uid: widget.data.uid);
-              //   },
-              // ));
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       // Navigator.push(context, MaterialPageRoute(
+        //       //   builder: (context) {
+        //       //     return QuizAdd(uid: widget.data.uid);
+        //       //   },
+        //       // ));
+        //     },
+        //     icon: const Icon(Icons.add),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
