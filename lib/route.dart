@@ -26,7 +26,7 @@ routeValidation(RouteSettings settings) {
               value: DatabaseService(uid: args.uid).payments,
             ),
           ],
-          child: History(uid: args.uid),
+          child: History(uid: args.uid, isAdmin: true),
         ),
       ); // Pass it to BarPage.
     }
@@ -47,7 +47,7 @@ routeValidation(RouteSettings settings) {
               value: DatabaseService(uid: uid).payments,
             ),
           ],
-          child: History(uid: uid),
+          child: History(uid: uid, isAdmin: false),
         ),
       ); // Pass it to BarPage.
     }

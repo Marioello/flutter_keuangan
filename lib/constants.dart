@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'models/model.dart';
+
 // Regex
 final RegExp nameRegExp = RegExp('[a-zA-Z]');
 
@@ -26,6 +28,8 @@ const Color cardColor = Colors.white;
 const Color fontColor = Colors.white;
 final List ansColors = [Colors.red, Colors.green, Colors.blue, Colors.amber];
 
+// Model
+Member memberDefaultEmpty = Member(uid: '', name: 'Dummy', blockNo: 'I/00');
 // Decoration
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
