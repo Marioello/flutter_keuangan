@@ -29,21 +29,42 @@ class History extends StatelessWidget {
           backgroundColor: Colors.green[50],
           appBar: AppBar(
             backgroundColor: Colors.green,
-            title: textHelper('Perumahan MPP Blok I', 20, 'bold'),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Icon(Icons.arrow_back_ios, size: 20.0),
+                textHelper('Iuran bulanan 2023', 20, 'bold'),
+                // Icon(Icons.arrow_forward_ios, size: 20.0),
+              ],
+            ),
+            centerTitle: true,
             elevation: 0.0,
             automaticallyImplyLeading: isAdmin,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(child: textHelper('Iuran bulanan', 20, 'bold')),
+                Card(
+                  elevation: 3.0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                      vertical: 10.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        textHelper(m.name, 18, '500'),
+                        const SizedBox(height: 5.0),
+                        textHelper(m.blockNo, 14, ''),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 10.0),
-                textHelper('Nama: ${m.name}', 18, ''),
-                const SizedBox(height: 5.0),
-                textHelper('Blok: ${m.blockNo}', 18, ''),
                 MultiProvider(
                   providers: [
                     StreamProvider<List<Payment>>.value(
@@ -62,60 +83,74 @@ class History extends StatelessWidget {
   }
 }
 
-class HistoryDataTable extends StatelessWidget {
+class HistoryDataTable extends StatefulWidget {
   const HistoryDataTable({super.key});
 
   @override
+  State<HistoryDataTable> createState() => _HistoryDataTableState();
+}
+
+class _HistoryDataTableState extends State<HistoryDataTable> {
+  List<Payment> list = [];
+  bool _sortAsc = false;
+
+  @override
   Widget build(BuildContext context) {
-    final list = Provider.of<List<Payment>>(context);
-    return list.isEmpty
-        ? Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                textHelper('Belum ada data', 20, ''),
-                const SizedBox(height: 20.0),
-                const SpinKitThreeBounce(color: Colors.blue, size: 50.0),
-              ],
-            ),
-          )
-        : DataTable(
+    list = Provider.of<List<Payment>>(context);
+
+    ///
+    if (list.isEmpty) {
+      return Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            textHelper('Belum ada data', 20, ''),
+            const SizedBox(height: 20.0),
+            const SpinKitThreeBounce(color: Colors.blue, size: 50.0),
+          ],
+        ),
+      );
+    } else {
+      /// Sort list
+      if (_sortAsc) {
+        list.sort((a, b) => a.month.compareTo(b.month));
+      } else {
+        list.sort((a, b) => b.month.compareTo(a.month));
+      }
+      return Card(
+        elevation: 3.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 0,
+            vertical: 0,
+          ),
+          child: DataTable(
             columns: [
               DataColumn(
-                label: textHelper('Bulan', 18, 'bold'),
+                label: textHelper('Bulan', 15, '500'),
                 onSort: (columnIndex, sortAscending) {
-                  // setState(
-                  //   () {
-                  //     if (columnIndex == _sortColumnIndex) {
-                  //       _sortAsc = _sortMonthAsc = sortAscending;
-                  //     } else {
-                  //       _sortColumnIndex = columnIndex;
-                  //       _sortAsc = _sortMonthAsc;
-                  //     }
-                  //     list.sort((a, b) => a.month.compareTo(b.month));
-                  //     if (!_sortAsc) {
-                  //       list = list.reversed.toList();
-                  //     }
-                  //   },
-                  // );
+                  setState(() => _sortAsc = sortAscending);
                 },
               ),
               DataColumn(
-                label: textHelper('Nominal', 18, 'bold'),
+                label: textHelper('Nominal', 15, '500'),
               ),
             ],
             rows: list
                 .map(
                   (e) => DataRow(
                     cells: [
-                      DataCell(Text(e.name)),
-                      DataCell(Text(e.nominal)),
+                      DataCell(textHelper(e.name, 15, '')),
+                      DataCell(textHelper(e.nominal, 15, '')),
                     ],
                   ),
                 )
                 .toList(),
             sortColumnIndex: 0,
-            // sortAscending: _sortAsc,
-          );
+            sortAscending: _sortAsc,
+          ),
+        ),
+      );
+    }
   }
 }
