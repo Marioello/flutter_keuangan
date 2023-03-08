@@ -97,6 +97,7 @@ class DatabaseService {
       'name': data.name,
       'nominal': data.nominal,
       'month': data.month,
+      'year': data.year,
     });
   }
 
@@ -110,6 +111,7 @@ class DatabaseService {
               name: e.get('name').toString(),
               nominal: e.get('nominal').toString(),
               month: int.parse(e.get('month').toString()),
+              year: int.parse(e.get('year').toString()),
             ),
           )
           .toList();

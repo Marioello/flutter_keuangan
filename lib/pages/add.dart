@@ -17,6 +17,7 @@ class _QuizAddState extends State<QuizAdd> {
   // form values
   String _name = '';
   String _month = '';
+  String _year = '';
   String _nominal = '50000';
 
   // Declare this variable
@@ -74,6 +75,7 @@ class _QuizAddState extends State<QuizAdd> {
                 onChanged: (val) {
                   setState(() => _name = val);
                 },
+                keyboardType: TextInputType.name,
               ),
               const SizedBox(height: 20.0),
               TextFormField(
@@ -87,6 +89,21 @@ class _QuizAddState extends State<QuizAdd> {
                 onChanged: (val) {
                   setState(() => _month = val);
                 },
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 20.0),
+              TextFormField(
+                initialValue: _month,
+                decoration: textInputDecoration.copyWith(hintText: 'Tahun'),
+                validator: (val) {
+                  return val!.isEmpty
+                      ? 'Silahkan masukan tahun dalam angka'
+                      : null;
+                },
+                onChanged: (val) {
+                  setState(() => _month = val);
+                },
+                keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20.0),
               TextFormField(
@@ -98,6 +115,7 @@ class _QuizAddState extends State<QuizAdd> {
                 onChanged: (val) {
                   setState(() => _nominal = val);
                 },
+                keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20.0),
               Row(
@@ -111,6 +129,7 @@ class _QuizAddState extends State<QuizAdd> {
                           name: _name,
                           nominal: _nominal,
                           month: int.parse(_month),
+                          year: int.parse(_year),
                         );
 
                         if (_formKey.currentState!.validate()) {

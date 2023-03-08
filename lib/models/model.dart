@@ -19,12 +19,14 @@ class Payment {
   String name;
   String nominal;
   int month;
+  int year;
 
   Payment({
     required this.uid,
     required this.name,
     required this.nominal,
     required this.month,
+    required this.year,
   });
 }
 

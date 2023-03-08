@@ -7,7 +7,7 @@ import '../helper.dart';
 import '../models/model.dart';
 import '../services/database.dart';
 
-class History extends StatelessWidget {
+class History extends StatefulWidget {
   static const String route = '/history';
 
   final String uid;
@@ -17,29 +17,61 @@ class History extends StatelessWidget {
   const History({super.key, required this.uid, required this.isAdmin});
 
   @override
+  State<History> createState() => _HistoryState();
+}
+
+class _HistoryState extends State<History> {
+  bool showPrevYear = true;
+  bool showNextYear = true;
+  int _year = DateTime.now().year;
+
+  @override
   Widget build(BuildContext context) {
     ///
     return Consumer<List<Member>>(
       builder: (context, data, child) {
-        Member m = data.isEmpty
-            ? memberDefaultEmpty
-            : data.firstWhere((element) => element.uid == uid);
+        Member m;
+        if (data.isEmpty) {
+          m = memberDefaultEmpty;
+        } else {
+          m = data.firstWhere((element) => element.uid == widget.uid);
+        }
 
         return Scaffold(
           backgroundColor: Colors.green[50],
           appBar: AppBar(
             backgroundColor: Colors.green,
             title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Icon(Icons.arrow_back_ios, size: 20.0),
-                textHelper('Iuran bulanan 2023', 20, 'bold'),
-                // Icon(Icons.arrow_forward_ios, size: 20.0),
+                IconButton(
+                  onPressed: () {
+                    if (_year > minYear) {
+                      setState(() => _year--);
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back_ios, size: 20.0),
+                  color: (_year > minYear) ? Colors.white : Colors.transparent,
+                ),
+                textHelper('Iuran bulanan $_year', 20, 'bold',
+                    color: Colors.white),
+                IconButton(
+                  onPressed: () {
+                    if (_year < maxYear) {
+                      setState(() => _year++);
+                    }
+                  },
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20.0,
+                    color: _year < maxYear ? Colors.white : Colors.transparent,
+                  ),
+                ),
               ],
             ),
             centerTitle: true,
             elevation: 0.0,
-            automaticallyImplyLeading: isAdmin,
+            automaticallyImplyLeading: widget.isAdmin,
           ),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -69,10 +101,10 @@ class History extends StatelessWidget {
                   providers: [
                     StreamProvider<List<Payment>>.value(
                       initialData: const [],
-                      value: DatabaseService(uid: uid).payments,
+                      value: DatabaseService(uid: widget.uid).payments,
                     ),
                   ],
-                  child: const HistoryDataTable(),
+                  child: HistoryDataTable(year: _year),
                 )
               ],
             ),
@@ -84,7 +116,8 @@ class History extends StatelessWidget {
 }
 
 class HistoryDataTable extends StatefulWidget {
-  const HistoryDataTable({super.key});
+  final int year;
+  const HistoryDataTable({super.key, required this.year});
 
   @override
   State<HistoryDataTable> createState() => _HistoryDataTableState();
@@ -96,7 +129,9 @@ class _HistoryDataTableState extends State<HistoryDataTable> {
 
   @override
   Widget build(BuildContext context) {
-    list = Provider.of<List<Payment>>(context);
+    list = Provider.of<List<Payment>>(context)
+        .where((element) => element.year == widget.year)
+        .toList();
 
     ///
     if (list.isEmpty) {
@@ -106,7 +141,7 @@ class _HistoryDataTableState extends State<HistoryDataTable> {
           children: [
             textHelper('Belum ada data', 20, ''),
             const SizedBox(height: 20.0),
-            const SpinKitThreeBounce(color: Colors.blue, size: 50.0),
+            const SpinKitThreeBounce(color: Colors.green, size: 50.0),
           ],
         ),
       );
@@ -117,6 +152,8 @@ class _HistoryDataTableState extends State<HistoryDataTable> {
       } else {
         list.sort((a, b) => b.month.compareTo(a.month));
       }
+
+      ///
       return Card(
         elevation: 3.0,
         child: Padding(

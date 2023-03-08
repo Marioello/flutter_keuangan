@@ -43,6 +43,8 @@ const textInputDecoration = InputDecoration(
 );
 
 // Year, month, date
+final minYear = 2022;
+final maxYear = 2026;
 final year = List.generate(5, (i) => i + 2022);
 
 // final month = [

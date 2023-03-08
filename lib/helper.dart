@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget textHelper(String name, double size, String weight) {
+Widget textHelper(String name, double size, String weight,
+    {Color color = Colors.black}) {
   FontWeight? fw = FontWeight.normal;
   switch (weight) {
     case 'bold':
@@ -39,6 +40,6 @@ Widget textHelper(String name, double size, String weight) {
 
   return Text(
     name,
-    style: TextStyle(fontSize: size, fontWeight: fw),
+    style: TextStyle(fontSize: size, fontWeight: fw, color: color),
   );
 }
